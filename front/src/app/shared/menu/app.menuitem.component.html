@@ -1,0 +1,26 @@
+<ng-container>
+    <a [attr.href]="item.url" (click)="itemClick($event)" *ngIf="(!item.routerLink || item.items) && item.visible !== false"
+       (mouseenter)="onMouseEnter()" (keydown.enter)="itemClick($event)"
+       [attr.target]="item.target" [attr.tabindex]="0" [ngClass]="item.class" pRipple>
+        <i class="layout-menuitem-icon" [ngClass]="item.icon"></i>
+        <span>{{item.label}}</span>
+        <span class="menuitem-badge" [ngClass]="item.badgeStyleClass" *ngIf="item.badge">{{item.badge}}</span>
+        <i class="pi pi-fw pi-angle-down layout-menuitem-toggler" *ngIf="item.items"></i>
+    </a>
+    <a (click)="itemClick($event)" (mouseenter)="onMouseEnter()" *ngIf="(item.routerLink && !item.items) && item.visible !== false"
+       [routerLink]="item.routerLink" routerLinkActive="active-menuitem-routerlink"
+       [routerLinkActiveOptions]="{exact: !item.preventExact}" [attr.target]="item.target" [attr.tabindex]="0" [ngClass]="item.class" pRipple>
+        <i class="layout-menuitem-icon" [ngClass]="item.icon"></i>
+        <span>{{item.label}}</span>
+        <span class="menuitem-badge" [ngClass]="item.badgeStyleClass" *ngIf="item.badge">{{item.badge}}</span>
+        <i class="pi pi-fw pi-angle-down layout-menuitem-toggler" *ngIf="item.items"></i>
+    </a>
+    <div class="submenu-arrow" *ngIf="item.items && item.visible !== false"></div>
+    <ul *ngIf="(item.items && active) && item.visible !== false"
+        [@children]="((app.isSlim()||app.isHorizontal()) && root) ? (active ? 'visible' : 'hidden') :
+        (active ? 'visibleAnimated' : 'hiddenAnimated')">
+        <ng-template ngFor let-child let-i="index" [ngForOf]="item.items">
+            <li app-menuitem [item]="child" [index]="i" [parentKey]="key" [class]="child.badgeClass"></li>
+        </ng-template>
+    </ul>
+</ng-container>
